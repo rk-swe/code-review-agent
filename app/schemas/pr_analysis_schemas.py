@@ -1,7 +1,16 @@
 from enum import StrEnum
 from typing import Self
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
+
+
+class CustomBaseModel(BaseModel):
+    model_config = ConfigDict(
+        from_attributes=True,
+        arbitrary_types_allowed=True,
+        str_strip_whitespace=True,
+    )
+
 
 ####
 
@@ -23,13 +32,20 @@ class CodeIssueType(StrEnum):
 ####
 
 
-class PrAnalysisCreate(BaseModel):
+class BasicRepsonse(CustomBaseModel):
+    message: str
+
+
+####
+
+
+class PrAnalysisCreate(CustomBaseModel):
     repo_url: str
     pr_number: int
     github_token: str | None = None
 
     @property
-    def owner(self: Self) -> str:
+    def repo_owner(self: Self) -> str:
         return self.repo_url.removeprefix("https://github.com/").split("/")[0]
 
     @property
@@ -37,35 +53,52 @@ class PrAnalysisCreate(BaseModel):
         return self.repo_url.removeprefix("https://github.com/").split("/")[1]
 
 
+class PrAnalysisCreateResponse(CustomBaseModel):
+    task_id: str
+    status: TaskStatus
+    error: str | None
+
+
 ####
 
 
-class PrAnalaysisResultFileIssue(BaseModel):
+class PrAnalysisStatusResponse(CustomBaseModel):
+    task_id: str
+    status: TaskStatus
+    error: str | None
+
+
+####
+
+
+class PrAnalaysisResultFileIssue(CustomBaseModel):
     type: CodeIssueType
     line: int
     description: str
     suggestion: str
+    is_critical: bool
 
 
-class PrAnalaysisResultFile(BaseModel):
+class PrAnalaysisResultFile(CustomBaseModel):
     name: str
     issues: list[PrAnalaysisResultFileIssue]
 
 
-class PrAnalaysisResultSummary(BaseModel):
+class PrAnalaysisResultSummary(CustomBaseModel):
     total_files: int
     total_issues: int
     critical_issues: int
 
 
-class PrAnalaysisResult(BaseModel):
+class PrAnalaysisResult(CustomBaseModel):
     files: list[PrAnalaysisResultFile]
     summary: PrAnalaysisResultSummary
 
 
-class PrAnalaysisResultResponse(BaseModel):
+class PrAnalaysisResultResponse(CustomBaseModel):
     task_id: str
     status: TaskStatus
+    error: str | None
     results: PrAnalaysisResult
 
 

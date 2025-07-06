@@ -9,10 +9,9 @@ dependencies = [
     "githubkit>=0.12.15",
     "openai>=1.93.0",
     "psycopg2>=2.9.10",
+    "pytest>=8.4.1",
     "python-dotenv>=1.1.1",
     "requests>=2.32.4",
+    "ruff>=0.12.2",
     "sqlalchemy>=2.0.41",
 ]
-
-[dependency-groups]
-dev = ["ruff>=0.12.2"]
