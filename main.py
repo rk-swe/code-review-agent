@@ -1,9 +1,9 @@
-from dotenv import load_dotenv
+from app.handlers import prefix
 
-# from app.services import openai_service
 # from app.services import github_service
+# from app.services import openai_service
 
-load_dotenv()
+prefix.run_prefix()
 
 
 def main():
@@ -11,7 +11,7 @@ def main():
 
     # openai_service.test()
 
-    # github_service.test()
+    # github_service.list_pull_request_files()
 
 
 if __name__ == "__main__":
