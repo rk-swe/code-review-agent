@@ -4,13 +4,13 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.models import get_db
-from app.schemas.pr_analysis_schemas import PrAnalysis
+from app.schemas.pr_analysis_schemas import PrAnalysisCreate
 
 router = APIRouter()
 
 
 @router.post("")
-def create_pr_analysis(req_body: PrAnalysis, db: Session = Depends(get_db)):
+def create_pr_analysis(req_body: PrAnalysisCreate, db: Session = Depends(get_db)):
     return {"message": "success", "data": {}}
 
 
