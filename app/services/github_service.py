@@ -10,6 +10,8 @@ from githubkit.exception import (
 from githubkit.versions.latest.models import DiffEntry
 
 GITHUB_PAT = os.environ["GITHUB_PAT"]
+
+
 github = GitHub(GITHUB_PAT)
 
 

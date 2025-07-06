@@ -10,3 +10,7 @@ wheels/
 .venv
 .env
 .vscode
+.ruff_cache
+
+# Local
+adhoc.py
