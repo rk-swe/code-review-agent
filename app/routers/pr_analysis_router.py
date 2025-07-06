@@ -1,9 +1,9 @@
 from uuid import UUID
 
 from fastapi import APIRouter, Depends
-from models import get_db
 from sqlalchemy.orm import Session
 
+from app.models import get_db
 from app.schemas.pr_analysis_schemas import PrAnalysis
 
 router = APIRouter()

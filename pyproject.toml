@@ -5,7 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "fastapi~=0.115.14",
+    "fastapi[standard]~=0.115.14",
     "githubkit>=0.12.15",
     "openai>=1.93.0",
     "psycopg>=3.2.9",
