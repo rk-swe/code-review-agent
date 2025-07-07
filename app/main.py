@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 from fastapi import FastAPI, Request, status  # noqa: E402
 from fastapi.middleware.cors import CORSMiddleware  # noqa: E402
 from fastapi.responses import JSONResponse  # noqa: E402

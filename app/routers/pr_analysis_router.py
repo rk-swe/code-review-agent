@@ -2,8 +2,13 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import delete, select
 from sqlalchemy.orm import Session, joinedload
 
+from app.celery_app import celery_app
+from app.handlers.logger import get_logger
 from app.models import get_db, models
 from app.schemas import pr_analysis_schemas
+
+logger = get_logger()
+
 
 router = APIRouter()
 
@@ -44,7 +49,12 @@ def create_pr_analysis(
     db.commit()
     db.refresh(db_analysis)
 
-    # TODO: Add background task
+    celery_app.send_task(
+        "app.celery_app.process_pr_analysis",
+        args=[db_analysis.task_id],
+        queue="default",
+    )
+    logger.info(f"Sent celery_task process_pr_analysis for {db_analysis.task_id}")
 
     return db_analysis
 
