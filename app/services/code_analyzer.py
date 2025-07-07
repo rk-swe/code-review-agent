@@ -23,6 +23,7 @@ def task_context(db: Session, task_id: str) -> Generator[None, None, None]:
         .values(status=pr_analysis_schemas.TaskStatus.PROCESSING)
     )
     db.commit()
+    logger.info(f"Task {task_id}, status = {pr_analysis_schemas.TaskStatus.PROCESSING}")
 
     try:
         yield
@@ -39,6 +40,7 @@ def task_context(db: Session, task_id: str) -> Generator[None, None, None]:
             )
         )
         db.commit()
+        logger.info(f"Task {task_id}, status = {pr_analysis_schemas.TaskStatus.FAILED}")
         raise
     else:
         db.execute(
@@ -47,6 +49,9 @@ def task_context(db: Session, task_id: str) -> Generator[None, None, None]:
             .values(status=pr_analysis_schemas.TaskStatus.COMPLETED)
         )
         db.commit()
+        logger.info(
+            f"Task {task_id}, status = {pr_analysis_schemas.TaskStatus.COMPLETED}"
+        )
 
 
 def analyze_pr(task_id: str):
@@ -65,6 +70,8 @@ def get_analysis_read_data(
 
 
 def analyze_pr_with_db(db: Session, task_id: str):
+    logger.info(f"Inside analyze_pr_with_db {task_id}")
+
     analysis_read_data = get_analysis_read_data(db, task_id)
 
     pull_request = github_service.get_pull_request(
@@ -73,6 +80,7 @@ def analyze_pr_with_db(db: Session, task_id: str):
         analysis_read_data.pr_number,
         analysis_read_data.github_token,
     )
+    logger.info("Got pull_request")
 
     diff_entries = github_service.list_pull_request_files(
         analysis_read_data.repo_owner,
@@ -80,8 +88,11 @@ def analyze_pr_with_db(db: Session, task_id: str):
         analysis_read_data.pr_number,
         analysis_read_data.github_token,
     )
+    logger.info(f"Got all the diff_entries length = ({len(diff_entries)})")
 
-    for diff_entry in diff_entries:
+    for index, diff_entry in enumerate(diff_entries):
+        logger.info(f"{index + 1}, {len(diff_entries)}, {diff_entry.filename}")
+
         diff = github_service.get_patch_from_diff_entry(diff_entry)
         full_code = github_service.get_file_content(
             analysis_read_data.repo_owner,
@@ -113,3 +124,6 @@ def analyze_pr_with_db(db: Session, task_id: str):
             )
         )
         db.commit()
+        logger.info(f"{index + 1}, {len(diff_entries)}, {diff_entry.filename}, success")
+
+    logger.info("Completed all diff_entries")
