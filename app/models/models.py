@@ -50,7 +50,7 @@ class PrAnalysisFile(Base):
     __tablename__ = "pr_analysis_file"
 
     id = mapped_column(String, primary_key=True, default=str_uuid4)
-    task_id = mapped_column(String, ForeignKey(PrAnalysis.task_id), ondelete="CASCADE")
+    task_id = mapped_column(String, ForeignKey(PrAnalysis.task_id, ondelete="CASCADE"))
 
     name = mapped_column(String)
     # diff
@@ -73,7 +73,7 @@ class PrAnalysisFileIssue(Base):
     __tablename__ = "pr_analysis_file_issue"
 
     id = mapped_column(String, primary_key=True, default=str_uuid4)
-    file_id = mapped_column(String, ForeignKey(PrAnalysisFile.id), ondelete="CASCADE")
+    file_id = mapped_column(String, ForeignKey(PrAnalysisFile.id, ondelete="CASCADE"))
 
     type = mapped_column(Enum(pr_analysis_schemas.CodeIssueType))
     line = mapped_column(Integer)
