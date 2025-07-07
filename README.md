@@ -47,7 +47,7 @@ To run tests
 
 To deploy in a vm or cloud, install docker and docker compose. The .env file should be updated slightly to add host of postgres and redis to be just postgres and redis. And then from inside base of the folder run
 
-`docker compose up -d`
+`docker compose up -d --build`
 
 # Explanation of design and decisions
 
