@@ -31,7 +31,9 @@ class PrAnalysis(Base):
 
     repo_url = mapped_column(String)
     pr_number = mapped_column(Integer)
-    github_token = mapped_column(String)
+    github_token = mapped_column(
+        String
+    )  # NOTE: security issue storing github_token, but for now storing for convinience
     repo = mapped_column(String)
     repo_owner = mapped_column(String)
 

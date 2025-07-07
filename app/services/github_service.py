@@ -26,7 +26,7 @@ from githubkit.versions.latest.models import ContentFile, DiffEntry, PullRequest
 def list_pull_request_files(
     repo_owner: str,
     repo: str,
-    pr_number: str,
+    pr_number: int,
     github_token: str | None,
 ) -> list[DiffEntry]:
     if github_token:
@@ -68,7 +68,7 @@ def get_patch_from_diff_entry(diff_entry: DiffEntry) -> str:
 def get_pull_request(
     repo_owner: str,
     repo: str,
-    pr_number: str,
+    pr_number: int,
     github_token: str | None = None,
 ) -> PullRequest:
     if github_token:

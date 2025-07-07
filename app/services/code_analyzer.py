@@ -4,9 +4,12 @@ from typing import Generator
 from sqlalchemy import insert, select, update
 from sqlalchemy.orm import Session
 
+from app.handlers.logger import get_logger
 from app.models import db_ctx_mgr, models
 from app.schemas import pr_analysis_schemas
 from app.services import github_service, openai_service
+
+logger = get_logger()
 
 
 @contextmanager
@@ -21,6 +24,7 @@ def task_context(db: Session, task_id: str) -> Generator[None, None, None]:
     try:
         yield
     except Exception as e:
+        logger.error("Error occurred", exc_info=True)
         db.rollback()
         db.execute(
             update(models.PrAnalysis)
@@ -81,8 +85,9 @@ def analyze_pr_with_db(db: Session, task_id: str):
             analysis_read_data.repo,
             diff_entry.filename,
             pull_request.head.sha,
+            analysis_read_data.github_token,
         )
-        file_result = openai_service.call_code_review(  # noqa: F841
+        file_result = openai_service.call_code_review(
             diff_entry.filename, diff, full_code
         )
 
@@ -100,8 +105,8 @@ def analyze_pr_with_db(db: Session, task_id: str):
                         "file_id": db_file.id,
                         **issue.model_dump(),
                     }
+                    for issue in file_result.issues
                 ]
-                for issue in file_result.issues
             )
         )
         db.commit()

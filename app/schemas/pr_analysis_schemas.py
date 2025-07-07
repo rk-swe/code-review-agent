@@ -132,7 +132,7 @@ class PrAnalaysisResultResponse(CustomBaseModel):
 
 class PrAnalysisReadData(CustomBaseModel):
     repo_url: str
-    pr_number: str
+    pr_number: int
     github_token: str | None
     repo: str
     repo_owner: str
