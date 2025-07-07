@@ -9,7 +9,7 @@ router = APIRouter()
 
 
 @router.get("/version")
-def get_all_customer_alembic_version(db: Session = Depends(get_db)):
+def get_alembic_version(db: Session = Depends(get_db)):
     version_num = db.execute(text("SELECT version_num FROM alembic_version;")).one()[0]
     return {"message": "success", "data": version_num}
 
