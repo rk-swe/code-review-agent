@@ -57,6 +57,7 @@ services:
         "app.celery_app.celery_app",
         "worker",
         "--loglevel=info",
+        "--queues=default",
       ]
 
 volumes:
