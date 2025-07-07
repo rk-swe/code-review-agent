@@ -62,6 +62,13 @@ def create_pr_analysis(
     return db_analysis
 
 
+@router.get("", response_model=list[pr_analysis_schemas.PrAnalysisStatusResponse])
+def get_all_pr_analysis(db: Session = Depends(get_db)):
+    db_analyses = db.scalars(select(models.PrAnalysis)).all()
+    db.commit()
+    return db_analyses
+
+
 @router.delete("", response_model=pr_analysis_schemas.BasicRepsonse)
 def delete_all_pr_analysis(db: Session = Depends(get_db)):
     db.execute(delete(models.PrAnalysis))
