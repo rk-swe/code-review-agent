@@ -12,6 +12,10 @@ The api creates a background celery task that goes to a celery worker through a 
 4. [Things that needs Improvements](#things-that-needs-improvements)
 5. [What is not there yet but am currently doing it](#what-is-not-there-yet-but-am-currently-doing-it)
 
+## Live Deployment Link
+
+[https://code-review-agent.onrender.com/docs](https://code-review-agent.onrender.com/docs)
+
 ## How to setup and run the code
 
 Install uv, see [uv documentation](https://docs.astral.sh/uv/).
@@ -88,8 +92,6 @@ but i could have handled each exception nicely and gave proper messages.
 Updating the README.md to be more readable and do markdown syntax correctly.
 
 I need to add a test for background_task - coming in a few more minutes.
-
-live deployment link - coming in a few more minutes.
 
 rate limiting - coming in a few more minutes.
 
