@@ -2,7 +2,7 @@ import logging
 
 
 def _set_up_logger() -> None:
-    logger = logging.getLogger("app")
+    logger = logging.getLogger("code-review-agent")
     if logger.hasHandlers():
         return
 
@@ -18,10 +18,10 @@ def _set_up_logger() -> None:
     handler.setFormatter(formatter)
 
     logger.addHandler(handler)
-    logger.info("app logger setup complete.")
+    logger.info("code-review-agent logger setup complete.")
 
 
 def get_logger() -> logging.Logger:
     _set_up_logger()
-    logger = logging.getLogger("app")
+    logger = logging.getLogger("code-review-agent")
     return logger
