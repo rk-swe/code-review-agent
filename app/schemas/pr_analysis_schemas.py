@@ -128,3 +128,14 @@ class PrAnalaysisResultResponse(CustomBaseModel):
 
 
 ####
+
+
+class PrAnalysisReadData(CustomBaseModel):
+    repo_url: str
+    pr_number: str
+    github_token: str | None
+    repo: str
+    repo_owner: str
+
+
+####

@@ -2,7 +2,7 @@ from contextlib import contextmanager
 from typing import Generator
 
 from models import db_ctx_mgr, models
-from sqlalchemy import select, update
+from sqlalchemy import insert, select, update
 from sqlalchemy.orm import Session
 
 from app.schemas import pr_analysis_schemas
@@ -48,33 +48,60 @@ def analyze_pr(task_id: str):
             analyze_pr_with_db(db, task_id)
 
 
-def analyze_pr_with_db(db: Session, task_id: str):
+def get_analysis_read_data(
+    db: Session, task_id: str
+) -> pr_analysis_schemas.PrAnalysisReadData:
     db_analysis = db.scalars(
         select(models.PrAnalysis).where(models.PrAnalysis.task_id == task_id)
     ).one()
+    return pr_analysis_schemas.PrAnalysisReadData.model_validate(db_analysis)
+
+
+def analyze_pr_with_db(db: Session, task_id: str):
+    analysis_read_data = get_analysis_read_data(db, task_id)
 
     pull_request = github_service.get_pull_request(
-        db_analysis.repo_owner,
-        db_analysis.repo,
-        db_analysis.pr_number,
-        db_analysis.github_token,
+        analysis_read_data.repo_owner,
+        analysis_read_data.repo,
+        analysis_read_data.pr_number,
+        analysis_read_data.github_token,
     )
 
     diff_entries = github_service.list_pull_request_files(
-        db_analysis.repo_owner,
-        db_analysis.repo,
-        db_analysis.pr_number,
-        db_analysis.github_token,
+        analysis_read_data.repo_owner,
+        analysis_read_data.repo,
+        analysis_read_data.pr_number,
+        analysis_read_data.github_token,
     )
 
     for diff_entry in diff_entries:
         diff = github_service.get_patch_from_diff_entry(diff_entry)
         full_code = github_service.get_file_content(
-            db_analysis.repo_owner,
-            db_analysis.repo,
+            analysis_read_data.repo_owner,
+            analysis_read_data.repo,
             diff_entry.filename,
             pull_request.head.sha,
         )
         file_result = openai_service.call_code_review(  # noqa: F841
             diff_entry.filename, diff, full_code
         )
+
+        db_file = models.PrAnalysisFile(
+            task_id=task_id,
+            name=diff_entry.filename,
+        )
+        db.add(db_file)
+        db.flush()
+
+        db.execute(
+            insert(models.PrAnalysisFileIssue).values(
+                [
+                    {
+                        "file_id": db_file.id,
+                        **issue.model_dump(),
+                    }
+                ]
+                for issue in file_result.issues
+            )
+        )
+        db.commit()
