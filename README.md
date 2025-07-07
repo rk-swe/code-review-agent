@@ -15,6 +15,10 @@ run uv synv
 create .env file following .env.example file
 setup postgres, redis, openai api key and put the url there
 
+To setup db
+
+run alembic upgrade head
+
 To run api service
 
 For dev
