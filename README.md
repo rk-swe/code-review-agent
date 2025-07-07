@@ -43,7 +43,11 @@ To run celery worker
 
 To run tests
 
-`run pytest`
+`pytest`
+
+To deploy in a vm or cloud, install docker and docker compose. The .env file should be updated slightly to add host of postgres and redis to be just postgres and redis. And then from inside base of the folder run
+
+`docker compose up -d`
 
 # Explanation of design and decisions
 
@@ -84,8 +88,6 @@ Updating the README.md to be more readable and do markdown syntax correctly.
 I need to add a test for background_task - coming in a few more minutes.
 
 live deployment link - coming in a few more minutes.
-
-docker configuration - coming in a few more minutes.
 
 rate limiting - coming in a few more minutes.
 
