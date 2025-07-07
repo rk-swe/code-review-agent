@@ -84,4 +84,4 @@ class PrAnalysisFileIssue(Base):
     created_at = mapped_column(DateTime, default=datetime.utcnow())
 
     # relationships
-    task = relationship(PrAnalysisFile, back_populates="issues")
+    file = relationship(PrAnalysisFile, back_populates="issues")

@@ -1,5 +1,3 @@
-from uuid import UUID
-
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import delete, select
 from sqlalchemy.orm import Session, joinedload
@@ -61,10 +59,10 @@ def delete_all_pr_analysis(db: Session = Depends(get_db)):
 ####
 
 
-@router.post(
+@router.get(
     "/{task_id}/status", response_model=pr_analysis_schemas.PrAnalysisStatusResponse
 )
-def get_pr_analysis_status(task_id: UUID, db: Session = Depends(get_db)):
+def get_pr_analysis_status(task_id: str, db: Session = Depends(get_db)):
     db_analysis = db.scalars(
         select(models.PrAnalysis).where(models.PrAnalysis.task_id == task_id)
     ).first()
@@ -87,10 +85,10 @@ def calculate_summary(db_files: list[models.PrAnalysisFile]) -> dict:
     }
 
 
-@router.post(
+@router.get(
     "/{task_id}/results", response_model=pr_analysis_schemas.PrAnalaysisResultResponse
 )
-def get_pr_analysis_results(task_id: UUID, db: Session = Depends(get_db)):
+def get_pr_analysis_results(task_id: str, db: Session = Depends(get_db)):
     db_analysis = db.scalars(
         select(models.PrAnalysis)
         .where(models.PrAnalysis.task_id == task_id)
@@ -115,8 +113,8 @@ def get_pr_analysis_results(task_id: UUID, db: Session = Depends(get_db)):
     return response_data
 
 
-@router.delete("/{task_id}", repsonse_model=pr_analysis_schemas.BasicRepsonse)
-def delete_pr_analysis(task_id: UUID, db: Session = Depends(get_db)):
+@router.delete("/{task_id}", response_model=pr_analysis_schemas.BasicRepsonse)
+def delete_pr_analysis(task_id: str, db: Session = Depends(get_db)):
     db.execute(delete(models.PrAnalysis).where(models.PrAnalysis.task_id == task_id))
     db.commit()
     return {"message": "success"}
