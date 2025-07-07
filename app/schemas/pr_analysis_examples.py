@@ -1,6 +1,6 @@
 CREATE_PR_ANALSYIS_RESPONSE = {
     200: {
-        "description": "A Sample response",
+        "description": "A Example response",
         "content": {
             "application/json": {
                 "example": {
@@ -30,7 +30,7 @@ CREATE_PR_ANALSYIS_REQUEST = [
 
 GET_PR_ANALYSIS_STATUS_RESPONSE = {
     200: {
-        "description": "A Sample response",
+        "description": "A Example response",
         "content": {
             "application/json": {
                 "example": {
@@ -51,7 +51,7 @@ GET_PR_ANALYSIS_STATUS_RESPONSE = {
 
 GET_PR_ANALYSIS_RESULTS_RESPONSE = {
     200: {
-        "description": "A Sample response",
+        "description": "A Example response",
         "content": {
             "application/json": {
                 "example": {
