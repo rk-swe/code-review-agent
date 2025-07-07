@@ -49,6 +49,8 @@ To deploy in a vm or cloud, install docker and docker compose. The .env file sho
 
 `docker compose up -d --build`
 
+Call upgrade_database api if needed. [app/routers/migration_router](app/routers/migration_router)
+
 # Explanation of design and decisions
 
 I should have clarified the requirements beforehand.
