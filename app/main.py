@@ -13,14 +13,16 @@ from fastapi.responses import JSONResponse  # noqa: E402
 from app.handlers.exceptions import AppUserError  # noqa: E402
 from app.handlers.logger import get_logger  # noqa: E402
 from app.routers import router  # noqa: E402
-from app.services import alembic_service  # noqa: E402
+
+# from app.services import alembic_service  # noqa: E402
 
 logger = get_logger()
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await asyncio.to_thread(alembic_service.upgrade_database)
+    # await asyncio.to_thread(alembic_service.upgrade_database)
+    # alembic_service.upgrade_database()
     yield
 
 
