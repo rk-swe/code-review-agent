@@ -5,7 +5,7 @@ client = OpenAI()
 
 def test():
     response = client.responses.create(
-        model="gpt-4.1",
+        model="o4-mini",
         input="Write a one-sentence bedtime story about a unicorn.",
     )
     print(response.output_text)
