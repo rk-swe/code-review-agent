@@ -62,7 +62,7 @@ def create_pr_analysis(
     return db_analysis
 
 
-@router.delete("/", response_model=pr_analysis_schemas.BasicRepsonse)
+@router.delete("", response_model=pr_analysis_schemas.BasicRepsonse)
 def delete_all_pr_analysis(db: Session = Depends(get_db)):
     db.execute(delete(models.PrAnalysis))
     db.commit()
