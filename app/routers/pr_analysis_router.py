@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session, joinedload
 from app.celery_app import celery_app
 from app.handlers.logger import get_logger
 from app.models import get_db, models
-from app.schemas import pr_analysis_schemas
+from app.schemas import pr_analysis_examples, pr_analysis_schemas
 
 logger = get_logger()
 
@@ -26,7 +26,11 @@ router = APIRouter()
 ####
 
 
-@router.post("", response_model=pr_analysis_schemas.PrAnalysisStatusResponse)
+@router.post(
+    "",
+    response_model=pr_analysis_schemas.PrAnalysisStatusResponse,
+    responses=pr_analysis_examples.CREATE_PR_ANALSYIS_RESPONSE,
+)
 def create_pr_analysis(
     req_body: pr_analysis_schemas.PrAnalysisCreate, db: Session = Depends(get_db)
 ) -> pr_analysis_schemas.PrAnalysisStatusResponse:
@@ -114,7 +118,6 @@ def get_pr_analysis_results(task_id: str, db: Session = Depends(get_db)):
         "task_id": db_analysis.task_id,
         "repo_url": db_analysis.repo_url,
         "pr_number": db_analysis.pr_number,
-        "github_token": db_analysis.github_token,
         "repo": db_analysis.repo,
         "repo_owner": db_analysis.repo_owner,
         "status": db_analysis.status,

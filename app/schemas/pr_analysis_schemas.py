@@ -5,6 +5,8 @@ from typing import Self
 
 from pydantic import BaseModel, ConfigDict, field_validator
 
+from app.schemas import pr_analysis_examples
+
 
 class CustomBaseModel(BaseModel):
     model_config = ConfigDict(
@@ -65,6 +67,12 @@ class PrAnalysisCreate(CustomBaseModel):
     def repo(self: Self) -> str:
         return self.repo_url.removeprefix("https://github.com/").split("/")[1]
 
+    model_config = {
+        "json_schema_extra": {
+            "examples": pr_analysis_examples.CREATE_PR_ANALSYIS_REQUEST
+        }
+    }
+
 
 ####
 
@@ -74,7 +82,6 @@ class PrAnalysisStatusResponse(CustomBaseModel):
 
     repo_url: str
     pr_number: int
-    github_token: str | None
     repo: str
     repo_owner: str
 
@@ -117,7 +124,6 @@ class PrAnalaysisResultResponse(CustomBaseModel):
 
     repo_url: str
     pr_number: int
-    github_token: str | None
     repo: str
     repo_owner: str
 
