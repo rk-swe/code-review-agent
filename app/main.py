@@ -22,7 +22,7 @@ logger = get_logger()
 async def lifespan(app: FastAPI):
     print("Running Alembic migrations...")
     await asyncio.to_thread(alembic_service.upgrade_database)
-    print("Alembig Migrations complete.")
+    print("Alembic Migrations complete.")
     yield
 
 
@@ -33,6 +33,7 @@ app = FastAPI(
         "name": "Rohit",
         "email": "rohit.ultimate10@gmail.com",
     },
+    lifespan=lifespan,
 )
 
 
