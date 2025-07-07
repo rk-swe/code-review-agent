@@ -20,9 +20,7 @@ logger = get_logger()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.info("Running Alembic migrations...")
     await asyncio.to_thread(alembic_service.upgrade_database)
-    logger.info("Alembic Migrations complete.")
     yield
 
 
