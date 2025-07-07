@@ -1,10 +1,10 @@
 from contextlib import contextmanager
 from typing import Generator
 
-from models import db_ctx_mgr, models
 from sqlalchemy import insert, select, update
 from sqlalchemy.orm import Session
 
+from app.models import db_ctx_mgr, models
 from app.schemas import pr_analysis_schemas
 from app.services import github_service, openai_service
 

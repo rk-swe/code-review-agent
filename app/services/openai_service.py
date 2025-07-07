@@ -1,5 +1,6 @@
 from openai import OpenAI
-from schemas import pr_analysis_schemas
+
+from app.schemas import pr_analysis_schemas
 
 client = OpenAI()
 
