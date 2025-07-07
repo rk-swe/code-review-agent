@@ -73,7 +73,9 @@ def delete_all_pr_analysis(db: Session = Depends(get_db)):
 
 
 @router.get(
-    "/{task_id}/status", response_model=pr_analysis_schemas.PrAnalysisStatusResponse
+    "/{task_id}/status",
+    response_model=pr_analysis_schemas.PrAnalysisStatusResponse,
+    responses=pr_analysis_examples.GET_PR_ANALYSIS_STATUS_RESPONSE,
 )
 def get_pr_analysis_status(task_id: str, db: Session = Depends(get_db)):
     db_analysis = db.scalars(
@@ -99,7 +101,9 @@ def calculate_summary(db_files: list[models.PrAnalysisFile]) -> dict:
 
 
 @router.get(
-    "/{task_id}/results", response_model=pr_analysis_schemas.PrAnalaysisResultResponse
+    "/{task_id}/results",
+    response_model=pr_analysis_schemas.PrAnalaysisResultResponse,
+    responses=pr_analysis_examples.GET_PR_ANALYSIS_RESULTS_RESPONSE,
 )
 def get_pr_analysis_results(task_id: str, db: Session = Depends(get_db)):
     db_analysis = db.scalars(
