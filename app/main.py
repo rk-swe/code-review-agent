@@ -1,8 +1,6 @@
-import logging
+from dotenv import load_dotenv
 
-from app.handlers import prefix
-
-prefix.run_prefix()
+load_dotenv()
 
 
 from fastapi import FastAPI, Request, status  # noqa: E402
@@ -10,7 +8,10 @@ from fastapi.middleware.cors import CORSMiddleware  # noqa: E402
 from fastapi.responses import JSONResponse  # noqa: E402
 
 from app.handlers.exceptions import AppUserError  # noqa: E402
+from app.handlers.logger import get_logger  # noqa: E402
 from app.routers import router  # noqa: E402
+
+logger = get_logger()
 
 app = FastAPI(
     title="Code Review Agent",
@@ -33,7 +34,7 @@ app.add_middleware(
 
 @app.exception_handler(AppUserError)
 def app_exception_handler(_: Request, exc: AppUserError):
-    logging.info(exc.message)
+    logger.info(exc.message)
     return JSONResponse(
         status_code=status.HTTP_400_BAD_REQUEST,
         content={"detail": exc.message},

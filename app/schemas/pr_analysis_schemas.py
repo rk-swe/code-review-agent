@@ -1,7 +1,11 @@
+import re
+from datetime import datetime
 from enum import StrEnum
 from typing import Self
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, field_validator
+
+from app.schemas import pr_analysis_examples
 
 
 class CustomBaseModel(BaseModel):
@@ -44,6 +48,17 @@ class PrAnalysisCreate(CustomBaseModel):
     pr_number: int
     github_token: str | None = None
 
+    @field_validator("repo_url")
+    @classmethod
+    def validate_github_repo_url(cls, value: str) -> str:
+        pattern = r"^https://github\.com/[^/]+/[^/]+/?$"
+        if not re.match(pattern, value):
+            raise ValueError(
+                "repo_url must be a valid GitHub repo URL like https://github.com/owner/repo"
+            )
+
+        return value.rstrip("/")
+
     @property
     def repo_owner(self: Self) -> str:
         return self.repo_url.removeprefix("https://github.com/").split("/")[0]
@@ -52,11 +67,11 @@ class PrAnalysisCreate(CustomBaseModel):
     def repo(self: Self) -> str:
         return self.repo_url.removeprefix("https://github.com/").split("/")[1]
 
-
-class PrAnalysisCreateResponse(CustomBaseModel):
-    task_id: str
-    status: TaskStatus
-    error: str | None
+    model_config = {
+        "json_schema_extra": {
+            "examples": pr_analysis_examples.CREATE_PR_ANALSYIS_REQUEST
+        }
+    }
 
 
 ####
@@ -64,8 +79,17 @@ class PrAnalysisCreateResponse(CustomBaseModel):
 
 class PrAnalysisStatusResponse(CustomBaseModel):
     task_id: str
+
+    repo_url: str
+    pr_number: int
+    repo: str
+    repo_owner: str
+
     status: TaskStatus
     error: str | None
+
+    created_at: datetime
+    updated_at: datetime | None
 
 
 ####
@@ -97,9 +121,27 @@ class PrAnalaysisResult(CustomBaseModel):
 
 class PrAnalaysisResultResponse(CustomBaseModel):
     task_id: str
+
+    repo_url: str
+    pr_number: int
+    repo: str
+    repo_owner: str
+
     status: TaskStatus
     error: str | None
+
     results: PrAnalaysisResult
+
+
+####
+
+
+class PrAnalysisReadData(CustomBaseModel):
+    repo_url: str
+    pr_number: int
+    github_token: str | None
+    repo: str
+    repo_owner: str
 
 
 ####

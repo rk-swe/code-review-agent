@@ -1,18 +1,20 @@
-from uuid import UUID
-
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import delete, select
 from sqlalchemy.orm import Session, joinedload
 
+from app.celery_app import celery_app
+from app.handlers.logger import get_logger
 from app.models import get_db, models
-from app.schemas import pr_analysis_schemas
+from app.schemas import pr_analysis_examples, pr_analysis_schemas
+
+logger = get_logger()
+
 
 router = APIRouter()
 
 
 # TODO: Add rate limiting
 # TODO: Add caching
-# TODO: Add tests
 
 # NOTE: Could seperate each file to its own child task but unnecessary
 # NOTE: For POC, no need for asyncio
@@ -24,10 +26,14 @@ router = APIRouter()
 ####
 
 
-@router.post("", response_model=pr_analysis_schemas.PrAnalysisCreateResponse)
+@router.post(
+    "",
+    response_model=pr_analysis_schemas.PrAnalysisStatusResponse,
+    responses=pr_analysis_examples.CREATE_PR_ANALSYIS_RESPONSE,
+)
 def create_pr_analysis(
     req_body: pr_analysis_schemas.PrAnalysisCreate, db: Session = Depends(get_db)
-) -> pr_analysis_schemas.PrAnalysisCreateResponse:
+) -> pr_analysis_schemas.PrAnalysisStatusResponse:
     # TODO: Reuse previously done work
     # check if (repo_url, pr) already exists in prev task
     # if no create new task
@@ -46,7 +52,12 @@ def create_pr_analysis(
     db.commit()
     db.refresh(db_analysis)
 
-    # TODO: Add background task
+    celery_app.send_task(
+        "app.celery_app.process_pr_analysis",
+        args=[db_analysis.task_id],
+        queue="default",
+    )
+    logger.info(f"Sent celery_task process_pr_analysis for {db_analysis.task_id}")
 
     return db_analysis
 
@@ -61,10 +72,12 @@ def delete_all_pr_analysis(db: Session = Depends(get_db)):
 ####
 
 
-@router.post(
-    "/{task_id}/status", response_model=pr_analysis_schemas.PrAnalysisStatusResponse
+@router.get(
+    "/{task_id}/status",
+    response_model=pr_analysis_schemas.PrAnalysisStatusResponse,
+    responses=pr_analysis_examples.GET_PR_ANALYSIS_STATUS_RESPONSE,
 )
-def get_pr_analysis_status(task_id: UUID, db: Session = Depends(get_db)):
+def get_pr_analysis_status(task_id: str, db: Session = Depends(get_db)):
     db_analysis = db.scalars(
         select(models.PrAnalysis).where(models.PrAnalysis.task_id == task_id)
     ).first()
@@ -87,10 +100,12 @@ def calculate_summary(db_files: list[models.PrAnalysisFile]) -> dict:
     }
 
 
-@router.post(
-    "/{task_id}/results", response_model=pr_analysis_schemas.PrAnalaysisResultResponse
+@router.get(
+    "/{task_id}/results",
+    response_model=pr_analysis_schemas.PrAnalaysisResultResponse,
+    responses=pr_analysis_examples.GET_PR_ANALYSIS_RESULTS_RESPONSE,
 )
-def get_pr_analysis_results(task_id: UUID, db: Session = Depends(get_db)):
+def get_pr_analysis_results(task_id: str, db: Session = Depends(get_db)):
     db_analysis = db.scalars(
         select(models.PrAnalysis)
         .where(models.PrAnalysis.task_id == task_id)
@@ -105,6 +120,10 @@ def get_pr_analysis_results(task_id: UUID, db: Session = Depends(get_db)):
 
     response_data = {
         "task_id": db_analysis.task_id,
+        "repo_url": db_analysis.repo_url,
+        "pr_number": db_analysis.pr_number,
+        "repo": db_analysis.repo,
+        "repo_owner": db_analysis.repo_owner,
         "status": db_analysis.status,
         "error": db_analysis.error,
         "results": {
@@ -115,8 +134,8 @@ def get_pr_analysis_results(task_id: UUID, db: Session = Depends(get_db)):
     return response_data
 
 
-@router.delete("/{task_id}", repsonse_model=pr_analysis_schemas.BasicRepsonse)
-def delete_pr_analysis(task_id: UUID, db: Session = Depends(get_db)):
+@router.delete("/{task_id}", response_model=pr_analysis_schemas.BasicRepsonse)
+def delete_pr_analysis(task_id: str, db: Session = Depends(get_db)):
     db.execute(delete(models.PrAnalysis).where(models.PrAnalysis.task_id == task_id))
     db.commit()
     return {"message": "success"}
