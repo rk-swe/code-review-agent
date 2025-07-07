@@ -1,3 +1,4 @@
+from datetime import datetime
 from enum import StrEnum
 from typing import Self
 
@@ -40,7 +41,7 @@ class BasicRepsonse(CustomBaseModel):
 
 
 class PrAnalysisCreate(CustomBaseModel):
-    repo_url: str
+    repo_url: str  # TODO: validate repo_url
     pr_number: int
     github_token: str | None = None
 
@@ -53,19 +54,23 @@ class PrAnalysisCreate(CustomBaseModel):
         return self.repo_url.removeprefix("https://github.com/").split("/")[1]
 
 
-class PrAnalysisCreateResponse(CustomBaseModel):
-    task_id: str
-    status: TaskStatus
-    error: str | None
-
-
 ####
 
 
 class PrAnalysisStatusResponse(CustomBaseModel):
     task_id: str
+
+    repo_url: str
+    pr_number: int
+    github_token: str | None
+    repo: str
+    repo_owner: str
+
     status: TaskStatus
     error: str | None
+
+    created_at: datetime
+    updated_at: datetime | None
 
 
 ####
@@ -97,8 +102,16 @@ class PrAnalaysisResult(CustomBaseModel):
 
 class PrAnalaysisResultResponse(CustomBaseModel):
     task_id: str
+
+    repo_url: str
+    pr_number: int
+    github_token: str | None
+    repo: str
+    repo_owner: str
+
     status: TaskStatus
     error: str | None
+
     results: PrAnalaysisResult
 
 

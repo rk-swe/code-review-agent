@@ -22,10 +22,10 @@ router = APIRouter()
 ####
 
 
-@router.post("", response_model=pr_analysis_schemas.PrAnalysisCreateResponse)
+@router.post("", response_model=pr_analysis_schemas.PrAnalysisStatusResponse)
 def create_pr_analysis(
     req_body: pr_analysis_schemas.PrAnalysisCreate, db: Session = Depends(get_db)
-) -> pr_analysis_schemas.PrAnalysisCreateResponse:
+) -> pr_analysis_schemas.PrAnalysisStatusResponse:
     # TODO: Reuse previously done work
     # check if (repo_url, pr) already exists in prev task
     # if no create new task
@@ -103,6 +103,11 @@ def get_pr_analysis_results(task_id: str, db: Session = Depends(get_db)):
 
     response_data = {
         "task_id": db_analysis.task_id,
+        "repo_url": db_analysis.repo_url,
+        "pr_number": db_analysis.pr_number,
+        "github_token": db_analysis.github_token,
+        "repo": db_analysis.repo,
+        "repo_owner": db_analysis.repo_owner,
         "status": db_analysis.status,
         "error": db_analysis.error,
         "results": {
