@@ -1,3 +1,6 @@
+import asyncio
+from contextlib import asynccontextmanager
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -10,8 +13,18 @@ from fastapi.responses import JSONResponse  # noqa: E402
 from app.handlers.exceptions import AppUserError  # noqa: E402
 from app.handlers.logger import get_logger  # noqa: E402
 from app.routers import router  # noqa: E402
+from app.services import alembic_service  # noqa: E402
 
 logger = get_logger()
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    print("Running Alembic migrations...")
+    await asyncio.to_thread(alembic_service.upgrade_database)
+    print("Alembic Migrations complete.")
+    yield
+
 
 app = FastAPI(
     title="Code Review Agent",
@@ -20,6 +33,7 @@ app = FastAPI(
         "name": "Rohit",
         "email": "rohit.ultimate10@gmail.com",
     },
+    lifespan=lifespan,
 )
 
 
