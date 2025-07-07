@@ -12,6 +12,9 @@ from app.services import github_service, openai_service
 logger = get_logger()
 
 
+# TODO: Can make things concurrent with threads or asyncio
+
+
 @contextmanager
 def task_context(db: Session, task_id: str) -> Generator[None, None, None]:
     db.execute(
