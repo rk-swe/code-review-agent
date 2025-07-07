@@ -41,7 +41,7 @@ def task_context(db: Session, task_id: str) -> Generator[None, None, None]:
         )
         db.commit()
         logger.info(f"Task {task_id}, status = {pr_analysis_schemas.TaskStatus.FAILED}")
-        raise
+        # raise
     else:
         db.execute(
             update(models.PrAnalysis)
