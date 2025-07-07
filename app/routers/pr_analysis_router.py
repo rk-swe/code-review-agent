@@ -15,7 +15,6 @@ router = APIRouter()
 
 # TODO: Add rate limiting
 # TODO: Add caching
-# TODO: Add tests
 
 # NOTE: Could seperate each file to its own child task but unnecessary
 # NOTE: For POC, no need for asyncio

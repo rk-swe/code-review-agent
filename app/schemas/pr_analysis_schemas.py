@@ -1,8 +1,9 @@
+import re
 from datetime import datetime
 from enum import StrEnum
 from typing import Self
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, field_validator
 
 
 class CustomBaseModel(BaseModel):
@@ -41,9 +42,20 @@ class BasicRepsonse(CustomBaseModel):
 
 
 class PrAnalysisCreate(CustomBaseModel):
-    repo_url: str  # TODO: validate repo_url
+    repo_url: str
     pr_number: int
     github_token: str | None = None
+
+    @field_validator("repo_url")
+    @classmethod
+    def validate_github_repo_url(cls, value: str) -> str:
+        pattern = r"^https://github\.com/[^/]+/[^/]+/?$"
+        if not re.match(pattern, value):
+            raise ValueError(
+                "repo_url must be a valid GitHub repo URL like https://github.com/owner/repo"
+            )
+
+        return value.rstrip("/")
 
     @property
     def repo_owner(self: Self) -> str:
