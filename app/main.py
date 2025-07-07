@@ -1,11 +1,16 @@
 import logging
 
-from fastapi import FastAPI, Request, status
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from app.handlers import prefix
 
-from app.handlers.exceptions import AppUserError
-from app.routers import router
+prefix.run_prefix()
+
+
+from fastapi import FastAPI, Request, status  # noqa: E402
+from fastapi.middleware.cors import CORSMiddleware  # noqa: E402
+from fastapi.responses import JSONResponse  # noqa: E402
+
+from app.handlers.exceptions import AppUserError  # noqa: E402
+from app.routers import router  # noqa: E402
 
 app = FastAPI(
     title="Code Review Agent",
