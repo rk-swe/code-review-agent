@@ -1,24 +1,22 @@
-from dataclasses import dataclass
-
-from pydantic_ai import Agent, RunContext
+from pydantic_ai import Agent, RunContext, Tool
 
 from app.schemas import pr_analysis_schemas
+from app.services.code_review_agent.common import (
+    ReviewCodeDeps,
+    only_if_python,
+    ruff_linter,
+)
 
 from .zero_shot_prompts import LANGUAGE_PROMPTS, SYSTEM_PROMPT, USER_PROMPT
-
-
-@dataclass
-class ReviewCodeDeps:
-    filename: str
-    diff: str
-    full_code: str
-
 
 agent = Agent(
     "openai:o4-mini",
     instructions=SYSTEM_PROMPT,
     deps_type=ReviewCodeDeps,
     output_type=pr_analysis_schemas.PrAnalaysisResultFile,
+    tools=[
+        Tool(ruff_linter, takes_ctx=True, prepare=only_if_python),
+    ],
 )
 
 
