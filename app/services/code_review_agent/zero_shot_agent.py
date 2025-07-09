@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 
-from pydantic_ai import Agent
+from pydantic_ai import Agent, RunContext
 
 from app.schemas import pr_analysis_schemas
 
-from .zero_shot_prompts import SYSTEM_PROMPT, USER_PROMPT
+from .zero_shot_prompts import LANGUAGE_PROMPTS, SYSTEM_PROMPT, USER_PROMPT
 
 
 @dataclass
@@ -20,6 +20,16 @@ agent = Agent(
     deps_type=ReviewCodeDeps,
     output_type=pr_analysis_schemas.PrAnalaysisResultFile,
 )
+
+
+@agent.instructions
+def add_language_specific_prompts(ctx: RunContext[ReviewCodeDeps]) -> str:
+    if ctx.deps.filename.endswith(".py"):
+        return LANGUAGE_PROMPTS[".py"]
+    elif ctx.deps.filename.endswith(".js"):
+        return LANGUAGE_PROMPTS[".js"]
+
+    return ""
 
 
 def review_code(

@@ -7,6 +7,7 @@ You are an expert software engineer and code reviewer. Your job is to analyze co
 - General best practices
 
 You always return structured, precise, and useful suggestions to improve code quality.
+Use language-specific prompts if available.
 """
 
 USER_PROMPT = """
