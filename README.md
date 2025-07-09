@@ -82,7 +82,7 @@ One more thing i thought of was using tools like ruff, pylint for python
 and other language specific tools to use with llm
 So llm can call the tool and get output and again make another llm call to get an answer.
 
-I feel using a llm agent framework would make things more complex. But some ideas I thought of were seperating each issue type and having specific agents
+But some ideas I thought of were seperating each issue type and having specific agents
 with sepecific tools for each issue type.
 This could be like a style agent, bug agent etc and can act parallelly and then we can aggregate and combine and maybe even use another llm call at the end.
 
