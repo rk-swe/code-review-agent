@@ -1,9 +1,9 @@
 from app.schemas import pr_analysis_schemas
 
-from . import openai_service
+from . import zero_shot_llm
 
 
 def review_code(
     filename: str, diff: str, full_code: str
 ) -> pr_analysis_schemas.PrAnalaysisResultFile:
-    return openai_service.review_code(filename, diff, full_code)
+    return zero_shot_llm.review_code(filename, diff, full_code)
