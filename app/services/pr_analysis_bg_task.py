@@ -106,7 +106,10 @@ def analyze_pr_with_db(db: Session, task_id: str):
             analysis_read_data.github_token,
         )
         file_result = code_review_agent.review_code(
-            diff_entry.filename, diff, full_code
+            diff_entry.filename,
+            diff,
+            full_code,
+            analysis_read_data.agent_type,
         )
 
         db_file = models.PrAnalysisFile(
