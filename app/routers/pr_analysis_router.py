@@ -130,6 +130,7 @@ def get_pr_analysis_results(task_id: str, db: Session = Depends(get_db)):
         "pr_number": db_analysis.pr_number,
         "repo": db_analysis.repo,
         "repo_owner": db_analysis.repo_owner,
+        "agent_type": db_analysis.agent_type,
         "status": db_analysis.status,
         "error": db_analysis.error,
         "results": {

@@ -19,6 +19,11 @@ class CustomBaseModel(BaseModel):
 ####
 
 
+class CodeReviewAgentType(StrEnum):
+    ZERO_SHOT_LLM = "zero_shot_llm"
+    ZERO_SHOT_AGENT = "zero_shot_agent"
+
+
 class TaskStatus(StrEnum):
     PENDING = "pending"
     PROCESSING = "processing"
@@ -47,6 +52,7 @@ class PrAnalysisCreate(CustomBaseModel):
     repo_url: str
     pr_number: int
     github_token: str | None = None
+    agent_type: CodeReviewAgentType = CodeReviewAgentType.ZERO_SHOT_AGENT
 
     @field_validator("repo_url")
     @classmethod
@@ -84,6 +90,7 @@ class PrAnalysisStatusResponse(CustomBaseModel):
     pr_number: int
     repo: str
     repo_owner: str
+    agent_type: CodeReviewAgentType
 
     status: TaskStatus
     error: str | None
@@ -126,6 +133,7 @@ class PrAnalaysisResultResponse(CustomBaseModel):
     pr_number: int
     repo: str
     repo_owner: str
+    agent_type: CodeReviewAgentType
 
     status: TaskStatus
     error: str | None
@@ -142,6 +150,7 @@ class PrAnalysisReadData(CustomBaseModel):
     github_token: str | None
     repo: str
     repo_owner: str
+    agent_type: CodeReviewAgentType
 
 
 ####

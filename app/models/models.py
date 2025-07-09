@@ -36,6 +36,7 @@ class PrAnalysis(Base):
     )  # NOTE: security issue storing github_token, but for now storing for convinience
     repo = mapped_column(String)
     repo_owner = mapped_column(String)
+    agent_type = mapped_column(Enum(pr_analysis_schemas.CodeReviewAgentType))
 
     status = mapped_column(Enum(pr_analysis_schemas.TaskStatus))
     error = mapped_column(String)
