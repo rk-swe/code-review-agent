@@ -75,12 +75,12 @@ The second step I used pydantic-ai library to make the agent.
 and have additional prompt hints for different languages
 based on file type This was in my scope but could not do in time.
 
+The third step I did was adding ruff linter to check python code
+we can also add other language specific tools to use with llm for reduced scope I only added ruff
+So llm can call the tool and get output and again make another llm call to get an answer.
+
 What improvements can we do at this stage, i think we can do deep research , chain of thought
 to be absolutelty sure and get better quality results.
-
-One more thing i thought of was using tools like ruff, pylint for python
-and other language specific tools to use with llm
-So llm can call the tool and get output and again make another llm call to get an answer.
 
 But some ideas I thought of were seperating each issue type and having specific agents
 with sepecific tools for each issue type.
