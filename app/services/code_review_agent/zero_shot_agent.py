@@ -1,9 +1,10 @@
 from dataclasses import dataclass
 
 from pydantic_ai import Agent
-from zero_shot_prompts import SYSTEM_PROMPT, USER_PROMPT
 
 from app.schemas import pr_analysis_schemas
+
+from .zero_shot_prompts import SYSTEM_PROMPT, USER_PROMPT
 
 
 @dataclass
