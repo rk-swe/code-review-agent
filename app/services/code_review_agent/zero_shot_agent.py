@@ -1,30 +1,9 @@
 from dataclasses import dataclass
 
 from pydantic_ai import Agent
+from zero_shot_prompts import SYSTEM_PROMPT, USER_PROMPT
 
 from app.schemas import pr_analysis_schemas
-
-SYSTEM_PROMPT = """
-You are an expert software engineer and code reviewer. Your job is to analyze code changes and provide constructive feedback across multiple dimensions:
-
-- Code style and formatting
-- Potential bugs or logical errors
-- Performance optimizations
-- General best practices
-
-You always return structured, precise, and useful suggestions to improve code quality.
-"""
-
-USER_PROMPT = """
-filename:
-{filename}
-
-diff:
-{diff}
-
-full_code:
-{full_code}
-"""
 
 
 @dataclass
