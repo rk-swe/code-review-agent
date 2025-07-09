@@ -1,8 +1,8 @@
-"""inital tables
+"""initial tables
 
-Revision ID: 0605815facbc
+Revision ID: 3a14da9d5b15
 Revises: 
-Create Date: 2025-07-07 05:34:42.520297
+Create Date: 2025-07-09 16:33:34.941955
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '0605815facbc'
+revision: str = '3a14da9d5b15'
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -28,6 +28,7 @@ def upgrade() -> None:
     sa.Column('github_token', sa.String(), nullable=True),
     sa.Column('repo', sa.String(), nullable=True),
     sa.Column('repo_owner', sa.String(), nullable=True),
+    sa.Column('agent_type', sa.Enum('ZERO_SHOT_LLM', 'ZERO_SHOT_AGENT', 'SEQUENTIAL_AGENT', name='codereviewagenttype'), nullable=True),
     sa.Column('status', sa.Enum('PENDING', 'PROCESSING', 'COMPLETED', 'FAILED', name='taskstatus'), nullable=True),
     sa.Column('error', sa.String(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
