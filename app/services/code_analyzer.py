@@ -14,6 +14,10 @@ logger = get_logger()
 
 # TODO: Can make things concurrent with threads or asyncio
 
+# TODO: Can keep status and error on file also
+# and dont stop on one error of file
+# complete all files then log error on task
+
 
 @contextmanager
 def task_context(db: Session, task_id: str) -> Generator[None, None, None]:

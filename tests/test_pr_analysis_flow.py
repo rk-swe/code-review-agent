@@ -52,6 +52,8 @@ def test_pr_analysis_full_flow():
     create_data = create_resp.json()
     task_id = create_data["task_id"]
 
+    # TODO: Test the background task
+
     # Step 2: Get Status
     status_resp = client.get(f"{url_prefix}/{task_id}/status")
     assert status_resp.status_code == 200

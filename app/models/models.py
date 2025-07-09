@@ -56,8 +56,8 @@ class PrAnalysisFile(Base):
 
     name = mapped_column(String)
     # diff
+    # file_content
     # content hashing or diff fingerprinting
-    # full file_content
 
     # status
     # error
