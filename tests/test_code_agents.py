@@ -26,3 +26,14 @@ def test_zero_shot_agent():
 
     y = zero_shot_agent.review_code(filename, diff, full_code)
     logger.info(y)
+
+
+@pytest.mark.slow
+def test_multi_agent():
+    filename = "app/services/pr_analysis_bg_task.py"
+    diff = ""
+    with open(filename, "r") as fp:
+        full_code = fp.read()
+
+    y = zero_shot_agent.review_code(filename, diff, full_code)
+    logger.info(y)

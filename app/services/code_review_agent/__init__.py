@@ -1,6 +1,6 @@
 from app.schemas import pr_analysis_schemas
 
-from . import zero_shot_agent, zero_shot_llm
+from . import multi_agent, zero_shot_agent, zero_shot_llm
 
 # TODO: exit non code files fast
 # TODO: exit very long files
@@ -18,6 +18,9 @@ def review_code(
 
         case pr_analysis_schemas.CodeReviewAgentType.ZERO_SHOT_AGENT:
             return zero_shot_agent.review_code(filename, diff, full_code)
+
+        case pr_analysis_schemas.CodeReviewAgentType.MULTI_AGENT:
+            return multi_agent.review_code(filename, diff, full_code)
 
         case _:
             assert False, f"Unknown agent type: {agent_type}"

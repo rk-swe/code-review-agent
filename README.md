@@ -94,11 +94,11 @@ Another Idea i had was the inital github pr pulling and getting files and adding
 
 ```mermaid
 flowchart LR;
-    A(Agent) --> B(Tools like ruff, eslint etc);
+    A(Agent) --> B[Tools like ruff, eslint etc];
 
 ```
 
-### Multi Agent based on
+### Multi Agent based on issue types
 
 ```mermaid
 flowchart TD;
@@ -117,9 +117,6 @@ flowchart TD;
     C --> F
     D --> F
     E --> F
-
-
-
 ```
 
 # Things that needs Improvements
