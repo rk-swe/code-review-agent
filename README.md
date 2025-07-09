@@ -15,6 +15,8 @@ The api creates a background celery task that goes to a celery worker through a 
 
 [https://code-review-agent.onrender.com/docs](https://code-review-agent.onrender.com/docs)
 
+You can use agent_type parameter in request to test different agents also
+
 ## How to setup and run the code
 
 Install uv, see [uv documentation](https://docs.astral.sh/uv/).
