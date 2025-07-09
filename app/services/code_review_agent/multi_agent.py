@@ -77,5 +77,5 @@ def review_code(
 
     return pr_analysis_schemas.PrAnalaysisResultFile(
         name=filename,
-        issues=[result.issues for result in final_result],
+        issues=[issue for result in final_result for issue in result.issues],
     )

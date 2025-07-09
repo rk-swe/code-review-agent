@@ -79,14 +79,13 @@ The third step I did was adding ruff linter to check python code
 we can also add other language specific tools to use with llm for reduced scope I only added ruff
 So llm can call the tool and get output and again make another llm call to get an answer.
 
-What improvements can we do at this stage, i think we can do deep research , chain of thought
-to be absolutelty sure and get better quality results.
-
-But some ideas I thought of were seperating each issue type and having specific agents
+The fourth step I did was seperating each issue type and having specific agents
 with sepecific tools for each issue type.
-This could be like a style agent, bug agent etc and can act parallelly and then we can aggregate and combine and maybe even use another llm call at the end.
+They are a style agent, bug agent, performance agent, best_practice_agent etc and can act parallelly and then we can aggregate and combine them at the end.
 
-Another Idea i had was the inital github pr pulling and getting files and adding each file to seperate agent but i realise this is very deterministic and i dont think this needs to be part of the agent
+What improvements can we do at this stage, i think we can do thinking models, deep research , chain of thought to be absolutelty sure and get better quality results.
+
+Another idea i had was the inital github pr pulling and getting files and adding each file to seperate agent but i realise this is very deterministic and i dont think this needs to be part of the agent
 
 # Diagrams
 
