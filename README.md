@@ -48,6 +48,9 @@ To run tests
 
 `pytest`
 
+There is one integration test file to test whole flo and one test file to test all the agents
+Run individual test files if necessary, since some tests include llm calls it will take time.
+
 To deploy in a vm or cloud, install docker and docker compose. The .env file should be updated slightly to add host of postgres and redis to be just postgres and redis. Also need to keep postgres db name to be postgres. And then from inside base of the folder run
 
 `docker compose up -d --build`
