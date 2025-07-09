@@ -11,6 +11,7 @@ dependencies = [
     "githubkit>=0.12.15",
     "openai>=1.93.0",
     "psycopg[c]>=3.2.9",
+    "pydantic-ai-slim[openai]>=0.4.0",
     "pytest>=8.4.1",
     "python-dotenv>=1.1.1",
     "redis>=6.2.0",
