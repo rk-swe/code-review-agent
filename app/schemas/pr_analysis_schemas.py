@@ -22,7 +22,7 @@ class CustomBaseModel(BaseModel):
 class CodeReviewAgentType(StrEnum):
     ZERO_SHOT_LLM = "zero_shot_llm"
     ZERO_SHOT_AGENT = "zero_shot_agent"
-    SEQUENTIAL_AGENT = "sequential_agent"
+    MULTI_AGENT = "multi_agent"
 
 
 class TaskStatus(StrEnum):

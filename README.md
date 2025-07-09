@@ -86,6 +86,42 @@ But some ideas I thought of were seperating each issue type and having specific 
 with sepecific tools for each issue type.
 This could be like a style agent, bug agent etc and can act parallelly and then we can aggregate and combine and maybe even use another llm call at the end.
 
+Another Idea i had was the inital github pr pulling and getting files and adding each file to seperate agent but i realise this is very deterministic and i dont think this needs to be part of the agent
+
+# Diagrams
+
+### Single Agent
+
+```mermaid
+flowchart LR;
+    A(Agent) --> B(Tools like ruff, eslint etc);
+
+```
+
+### Multi Agent based on
+
+```mermaid
+flowchart TD;
+    A(Start)
+    B(Style Agent)
+    C(Bug Agent)
+    D(Perform Agent)
+    E(Best Practice Agent)
+    F(End)
+
+    A --> B
+    A --> C
+    A --> D
+    A --> E
+    B --> F
+    C --> F
+    D --> F
+    E --> F
+
+
+
+```
+
 # Things that needs Improvements
 
 Add condition to exit non code files fast.
@@ -116,3 +152,7 @@ rate limiting - coming in a few more minutes.
 response caching - will take some more time.
 
 ---
+
+```
+
+```
