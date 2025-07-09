@@ -7,6 +7,7 @@ from sqlalchemy.orm import sessionmaker
 
 from app.main import app
 from app.models import get_db, models
+from app.services import pr_analysis_bg_task
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
 engine = create_engine(
@@ -36,6 +37,7 @@ def setup_db():
     os.remove("./test.db")
 
 
+@pytest.mark.slow
 def test_pr_analysis_full_flow():
     url_prefix = "/api/v1/pr-analysis"
 
@@ -52,16 +54,19 @@ def test_pr_analysis_full_flow():
     create_data = create_resp.json()
     task_id = create_data["task_id"]
 
-    # TODO: Test the background task
-
     # Step 2: Get Status
     status_resp = client.get(f"{url_prefix}/{task_id}/status")
     assert status_resp.status_code == 200
 
-    # Step 3: Get Results
+    # Step 3: Run Background Task
+    with override_get_db() as db:
+        with pr_analysis_bg_task.task_context(db, task_id):
+            pr_analysis_bg_task.analyze_pr_with_db(db, task_id)
+
+    # Step 4: Get Results
     result_resp = client.get(f"{url_prefix}/{task_id}/results")
     assert result_resp.status_code == 200
 
-    # Step 4: Delete
+    # Step 5: Delete
     delete_resp = client.delete(f"{url_prefix}/{task_id}")
     assert delete_resp.status_code == 200
