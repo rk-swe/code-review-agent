@@ -13,7 +13,7 @@ def test():
     print(response.output_text)
 
 
-def call_code_review(
+def review_code(
     filename: str, diff: str, full_code: str
 ) -> pr_analysis_schemas.PrAnalaysisResultFile:
     system_prompt = """

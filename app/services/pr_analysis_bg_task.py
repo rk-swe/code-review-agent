@@ -7,7 +7,8 @@ from sqlalchemy.orm import Session
 from app.handlers.logger import get_logger
 from app.models import db_ctx_mgr, models
 from app.schemas import pr_analysis_schemas
-from app.services import github_service, openai_service
+from app.services import github_service
+from app.services.code_review_agent import openai_service
 
 logger = get_logger()
 
@@ -105,9 +106,7 @@ def analyze_pr_with_db(db: Session, task_id: str):
             pull_request.head.sha,
             analysis_read_data.github_token,
         )
-        file_result = openai_service.call_code_review(
-            diff_entry.filename, diff, full_code
-        )
+        file_result = openai_service.review_code(diff_entry.filename, diff, full_code)
 
         db_file = models.PrAnalysisFile(
             task_id=task_id,
