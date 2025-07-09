@@ -30,6 +30,7 @@ def upgrade() -> None:
             nullable=True,
         ),
     )
+    op.execute(sa.text("UPDATE pr_analysis SET agent_type = 'ZERO_SHOT_LLM';"))
     # ### end Alembic commands ###
 
 
